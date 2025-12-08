@@ -2,42 +2,218 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>2171213.xyz - 我的第一个网站</title>
-  <meta name="description" content="这是我用 GitHub Pages + 自己域名搭建的第一个网站">
+  <title>2171213.xyz | 科技空间</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 粒子背景库 -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* 加载进度条 */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      flex-direction: column;
+    }
+
+    .bar {
+      width: 220px;
+      height: 6px;
+      background: #222;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+
+    .bar span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00eaff, #0066ff);
+      animation: load 2.2s forwards;
+    }
+
+    @keyframes load {
+      to { width: 100%; }
+    }
+
+    /* 粒子背景 */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .panel {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 440px;
+      padding: 40px 30px;
+      background: rgba(20, 20, 30, 0.85);
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,255,0.25);
+      box-shadow:
+        0 0 25px rgba(0,255,255,0.15),
+        inset 0 0 20px rgba(0,255,255,0.05);
+      text-align: center;
+      animation: fadeUp 0.9s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+      color: #00eaff;
+      text-shadow: 0 0 10px rgba(0,234,255,0.6);
+    }
+
+    .sub {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 22px;
+    }
+
+    .desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #ddd;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #00eaff, #0066ff);
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(0,234,255,0.7);
+      transition: 0.25s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 28px rgba(0,234,255,1);
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.8;
+    }
+
+    .counter {
+      color: #00eaff;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    .map {
+      margin-top: 18px;
+    }
+  </style>
 </head>
 
-<body style="font-family: Arial; background: #f5f5f5; text-align: center; padding-top: 100px;">
+<body>
 
-  <h1 style="color: #333;">Hello World 🌍</h1>
-  <p>欢迎来到 2171213.xyz</p>
-  <p>这是我人生第一个独立网站。</p>
-<div style="margin-top: 40px;">
-  <a href="message.html"
-     style="
-       display: inline-block;
-       padding: 12px 24px;
-       background: #007bff;
-       color: white;
-       text-decoration: none;
-       border-radius: 6px;
-       font-size: 16px;
-     ">
-    💬 进入留言板
-  </a>
+<!-- 加载层 -->
+<div id="loader">
+  <div>系统加载中...</div>
+  <div class="bar"><span></span></div>
 </div>
 
-  <!-- 备案说明 -->
-  <p style="margin-top: 40px; font-size: 12px; color: #888;">
-    本站为个人学习与测试用途，非商业网站
-  </p>
-<p style="margin-top:40px; font-size:14px; color:#888;">
-  👀 本站总访问量：
-  <span id="busuanzi_value_site_pv">加载中...</span> 次  
-  | 访客数：
-  <span id="busuanzi_value_site_uv">加载中...</span> 人
-</p>
+<!-- 粒子背景 -->
+<div id="particles-js"></div>
 
+<div class="panel">
+  <h1>2171213.XYZ</h1>
+  <div class="sub">TECH · SPACE · PERSONAL SITE</div>
+
+  <div class="desc">
+    这是我亲手搭建的第一个独立网站<br>
+    GitHub Pages + 自定义域名 + 科技风 UI<br>
+    持续升级中 🚀
+  </div>
+
+  <a class="btn" href="message.html">进入留言板</a>
+
+  <div class="footer">
+    <div>
+      👁 总访问量：
+      <span class="counter" id="busuanzi_value_site_pv">加载中…</span>
+    </div>
+    <div>
+      👤 访客数：
+      <span class="counter" id="busuanzi_value_site_uv">加载中…</span>
+    </div>
+
+    <!-- ✅ 访客地图 -->
+    <div class="map">
+      <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=5v9ivg7o6ni&amp;m=7&amp;c=00eaff&amp;cr1=ffffff&amp;f=arial&amp;l=0" async></script>
+    </div>
+
+    <div style="margin-top:10px;">
+      本站为个人学习测试用途 · 非商业网站
+    </div>
+  </div>
+</div>
+
+<!-- 访问统计 -->
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- 粒子初始化 -->
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 80 },
+    color: { value: "#00eaff" },
+    shape: { type: "circle" },
+    opacity: { value: 0.4 },
+    size: { value: 2 },
+    move: { speed: 1 }
+  }
+});
+
+// 加载动画消失
+setTimeout(() => {
+  document.getElementById("loader").style.display = "none";
+}, 2300);
+</script>
+
 </body>
 </html>
