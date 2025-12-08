@@ -4,25 +4,132 @@
   <meta charset="UTF-8">
   <title>留言板 - 2171213.xyz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- LeanCloud SDK -->
+  <script src="https://unpkg.com/leancloud-storage/dist/av-min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: radial-gradient(circle at top, #0f2027, #000);
+      color: #00eaff;
+      text-align: center;
+    }
+
+    .box {
+      width: 90%;
+      max-width: 500px;
+      margin: 40px auto;
+      background: rgba(0,0,0,0.6);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px #00eaff;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg,#00eaff,#007bff);
+      font-size: 16px;
+    }
+
+    .msg {
+      text-align: left;
+      background: rgba(0,234,255,0.1);
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 
-<body style="font-family: Arial; background: #f5f5f5; text-align: center; padding-top: 50px;">
+<body>
 
-  <h1>💬 留言板</h1>
-  <p>欢迎留言，使用 GitHub 账号登录即可</p>
+  <h1>💬 公开留言板</h1>
 
-  <!-- 留言系统开始 -->
-  <script src="https://utteranc.es/client.js"
-          repo="xsjix/xsjix.github.io"
-          issue-term="message-board"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-  <!-- 留言系统结束 -->
+  <div class="box">
 
-  <br><br>
-  <a href="index.html">⬅ 返回首页</a>
+    <input id="email" type="email" placeholder="请输入邮箱（匿名可随便填）">
+    <textarea id="content" rows="4" placeholder="请输入你的留言"></textarea>
+
+    <div style="margin-top:10px;">
+      <label>
+        <input id="anonymous" type="checkbox"> 匿名留言
+      </label>
+    </div>
+
+    <button onclick="submitMsg()">提交留言</button>
+
+    <div id="list"></div>
+
+  </div>
+
+<script>
+/* ✅ 这里替换为你自己的 LeanCloud 信息 */
+AV.init({
+  appId: "TGixbyZDkjrzGWFKki6dEPVk-gzGzoHsz",
+  appKey: "EutYuSqMClW6JY9hoYhQaz9T",
+  serverURLs: "https://tgixbyzd.lc-cn-n1-shared.com"
+});
+
+/* ✅ 提交留言 */
+function submitMsg() {
+  const email = document.getElementById("email").value;
+  const content = document.getElementById("content").value;
+  const anon = document.getElementById("anonymous").checked;
+
+  if (!content) {
+    alert("请输入留言内容");
+    return;
+  }
+
+  const Message = AV.Object.extend("Message");
+  const msg = new Message();
+
+  msg.set("email", email || "匿名用户");
+  msg.set("content", content);
+  msg.set("anonymous", anon);
+
+  msg.save().then(() => {
+    alert("留言成功！");
+    document.getElementById("content").value = "";
+    loadMsg();
+  });
+}
+
+/* ✅ 读取留言 */
+function loadMsg() {
+  const query = new AV.Query("Message");
+  query.descending("createdAt");
+  query.find().then(list => {
+    let html = "";
+    list.forEach(item => {
+      const email = item.get("anonymous") ? "匿名用户" : item.get("email");
+      html += `
+        <div class="msg">
+          <div>👤 ${email}</div>
+          <div>${item.get("content")}</div>
+        </div>
+      `;
+    });
+    document.getElementById("list").innerHTML = html;
+  });
+}
+
+loadMsg();
+</script>
 
 </body>
 </html>
