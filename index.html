@@ -3,141 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <title>2171213.xyz</title>
-  <meta name="description" content="我的第一个个人网站">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ 访问统计 -->
+  <!-- 访问统计 -->
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
   <style>
     body {
       margin: 0;
-      font-family: "PingFang SC", "Microsoft YaHei", Arial;
-      color: #333;
-      overflow: hidden;
-      background: #eef3f1;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: #f2f2f2;
+      line-height: 1.8;
+      background:
+        linear-gradient(
+          rgba(20, 30, 50, 0.25),
+          rgba(10, 20, 40, 0.45)
+        ),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
 
-    /* ✅ 世界地图背景 */
-    .bg {
-      position: fixed;
-      inset: 0;
-      background: url("https://img.jsdelivr.com/raw.githubusercontent.com/andreasbm/world-map/master/world.svg") center/cover no-repeat;
-      opacity: 0.25;
-      z-index: -2;
-    }
-
-    canvas {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-    }
-
-    .card {
-      width: 90%;
-      max-width: 520px;
-      margin: 100px auto;
-      background: rgba(255,255,255,0.92);
-      padding: 50px 30px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 90px 22px;
     }
 
     h1 {
-      font-size: 30px;
-      margin-bottom: 12px;
+      font-size: 40px;
+      margin-bottom: 20px;
       font-weight: 600;
     }
 
+    h2 {
+      font-size: 26px;
+      margin-top: 80px;
+      margin-bottom: 18px;
+    }
+
     p {
-      font-size: 15px;
-      color: #666;
-      line-height: 1.8;
+      font-size: 16px;
+      color: #e0e0e0;
+      max-width: 720px;
     }
 
     .btn {
       display: inline-block;
-      margin-top: 35px;
-      padding: 12px 36px;
-      background: #4CAF50;
-      color: white;
-      text-decoration: none;
+      margin-top: 24px;
+      padding: 12px 32px;
       border-radius: 30px;
-      font-size: 16px;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.35);
+      backdrop-filter: blur(6px);
+      transition: 0.25s;
     }
 
-    .footer {
-      margin-top: 35px;
-      font-size: 12px;
-      color: #888;
+    .btn:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    .stats {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #cfcfcf;
+    }
+
+    footer {
+      margin-top: 120px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.25);
+      font-size: 13px;
+      color: #bdbdbd;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ✅ 世界地图背景 -->
-  <div class="bg"></div>
-  <canvas id="dot"></canvas>
+<div class="container">
 
-  <div class="card">
-    <h1>🌍 Hello World</h1>
-    <p>欢迎来到 2171213.xyz</p>
-    <p>这是我人生第一个独立网站</p>
+  <h1>在星空之下，记录真实的自己。</h1>
 
-    <a class="btn" href="message.html">进入留言板</a>
+  <p>
+    欢迎来到 <strong>2171213.xyz</strong>。  
+    这是我的一个网络小空间，
+    一个慢慢搭建、长期存在的小空间。
+  </p>
 
-    <!-- ✅ 访问统计显示 -->
-    <p style="margin-top:30px; font-size:14px; color:#666;">
-      👀 访问量：<span id="busuanzi_value_site_pv">--</span> 次　
-      👤 访客数：<span id="busuanzi_value_site_uv">--</span> 人
-    </p>
+  <h2>关于</h2>
+  <p>
+    这个空间不追求复杂功能，
+    只希望真实、稳定、可持续。
+    就像夜空一样，安静，却一直存在。
+  </p>
 
-    <div class="footer">
-      本站为个人学习与测试用途 · 非商业站点
-    </div>
+  <h2>留言</h2>
+  <p>
+    如果你愿意，可以留下点什么。
+    一句话、一个想法，都会被认真保存。
+  </p>
+
+  <a class="btn" href="message.html">💬 进入留言板</a>
+
+  <div class="stats">
+    👀 访问量：<span id="busuanzi_value_site_pv">--</span> 次  
+    ｜ 👤 访客数：<span id="busuanzi_value_site_uv">--</span> 人
   </div>
 
-  <!-- ✅ 世界访问光点动画 -->
-  <script>
-    const canvas = document.getElementById("dot");
-    const ctx = canvas.getContext("2d");
+  <footer>
+    © 2025 · 2171213.xyz
+  </footer>
 
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resize();
-    window.onresize = resize;
-
-    const dots = [];
-
-    function addDot() {
-      dots.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: 2,
-        alpha: 1
-      });
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      dots.forEach((d, i) => {
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(76,175,80,${d.alpha})`;
-        ctx.fill();
-        d.alpha -= 0.01;
-        if (d.alpha <= 0) dots.splice(i, 1);
-      });
-      requestAnimationFrame(draw);
-    }
-
-    setInterval(addDot, 600);
-    draw();
-  </script>
+</div>
 
 </body>
 </html>
