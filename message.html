@@ -11,60 +11,113 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial;
-      background: radial-gradient(circle at top, #0f2027, #000);
-      color: #00eaff;
+      font-family: "PingFang SC","Microsoft YaHei",Arial,sans-serif;
+      color: #f2f2f2;
       text-align: center;
+      background:
+        linear-gradient(
+          rgba(15, 25, 40, 0.45),
+          rgba(10, 20, 35, 0.65)
+        ),
+        url("https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-weight: 500;
     }
 
     .box {
-      width: 90%;
-      max-width: 500px;
-      margin: 40px auto;
-      background: rgba(0,0,0,0.6);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px #00eaff;
+      width: 92%;
+      max-width: 520px;
+      margin: 30px auto 60px;
+      background: rgba(0,0,0,0.45);
+      padding: 30px 25px;
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 40px rgba(0,0,0,0.4);
     }
 
     input, textarea {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
+      margin-top: 12px;
       border-radius: 10px;
       border: none;
-      font-size: 16px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    .options {
+      margin-top: 12px;
+      font-size: 14px;
+      text-align: left;
+      color: #dddddd;
     }
 
     button {
-      margin-top: 16px;
-      padding: 12px 30px;
+      margin-top: 18px;
+      padding: 12px 36px;
       border: none;
       border-radius: 30px;
-      background: linear-gradient(90deg,#00eaff,#007bff);
-      font-size: 16px;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: rgba(255,255,255,0.4);
     }
 
     .msg {
       text-align: left;
-      background: rgba(0,234,255,0.1);
-      padding: 10px;
-      margin-top: 15px;
-      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      padding: 12px 14px;
+      margin-top: 16px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .msg div:first-child {
+      font-size: 13px;
+      color: #bbbbbb;
+      margin-bottom: 6px;
+    }
+
+    a.back {
+      display: inline-block;
+      margin-top: 20px;
+      color: #ffffff;
+      text-decoration: none;
+      opacity: 0.8;
+      font-size: 14px;
+    }
+
+    a.back:hover {
+      opacity: 1;
     }
   </style>
 </head>
 
 <body>
 
-  <h1>💬 公开留言板</h1>
+  <h1>💬 留言板</h1>
 
   <div class="box">
 
     <input id="email" type="email" placeholder="请输入邮箱（匿名可随便填）">
     <textarea id="content" rows="4" placeholder="请输入你的留言"></textarea>
 
-    <div style="margin-top:10px;">
+    <div class="options">
       <label>
         <input id="anonymous" type="checkbox"> 匿名留言
       </label>
@@ -76,15 +129,17 @@
 
   </div>
 
+  <a class="back" href="index.html">← 返回首页</a>
+
 <script>
-/* ✅ 这里替换为你自己的 LeanCloud 信息 */
+/* LeanCloud 初始化（保持你的原配置） */
 AV.init({
   appId: "TGixbyZDkjrzGWFKki6dEPVk-gzGzoHsz",
   appKey: "EutYuSqMClW6JY9hoYhQaz9T",
   serverURLs: "https://tgixbyzd.lc-cn-n1-shared.com"
 });
 
-/* ✅ 提交留言 */
+/* 提交留言 */
 function submitMsg() {
   const email = document.getElementById("email").value;
   const content = document.getElementById("content").value;
@@ -109,7 +164,7 @@ function submitMsg() {
   });
 }
 
-/* ✅ 读取留言 */
+/* 读取留言 */
 function loadMsg() {
   const query = new AV.Query("Message");
   query.descending("createdAt");
