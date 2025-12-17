@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>俄罗斯方块 · 2171213.xyz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: "PingFang SC","Microsoft YaHei",Arial,sans-serif;
+  background: #111;
+  color: #fff;
+  text-align: center;
+}
+
+h1 {
+  margin: 15px 0 5px;
+  font-weight: 500;
+}
+
+#game {
+  background: #222;
+  margin: 10px auto;
+  display: block;
+  border-radius: 8px;
+}
+
+#score {
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.controls {
+  max-width: 320px;
+  margin: 15px auto 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.controls button {
+  padding: 14px 0;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: #444;
+  color: #fff;
+}
+
+.controls button:active {
+  background: #666;
+}
+
+a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧱 俄罗斯方块</h1>
+
+<canvas id="game" width="200" height="400"></canvas>
+
+<div id="score">得分：0</div>
+
+<!-- 手机触控按钮 -->
+<div class="controls">
+  <button onclick="move(-1)">←</button>
+  <button onclick="rotate()">旋转</button>
+  <button onclick="move(1)">→</button>
+  <button onclick="drop()">↓</button>
+  <button onclick="hardDrop()">快速落下</button>
+  <button onclick="pause()">暂停</button>
+</div>
+
+<a href="index.html">← 返回首页</a>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const COLS = 10, ROWS = 20, SIZE = 20;
+
+let board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+let score = 0;
+let paused = false;
+
+const SHAPES = [
+  [[1,1,1,1]],
+  [[1,1],[1,1]],
+  [[0,1,0],[1,1,1]],
+  [[1,0,0],[1,1,1]],
+  [[0,0,1],[1,1,1]],
+  [[1,1,0],[0,1,1]],
+  [[0,1,1],[1,1,0]]
+];
+
+const COLORS = [
+  "#00f0f0","#f0f000","#a000f0","#f0a000",
+  "#0000f0","#00f000","#f00000"
+];
+
+let piece = newPiece();
+
+function newPiece() {
+  const id = Math.floor(Math.random() * SHAPES.length);
+  return {
+    shape: SHAPES[id],
+    color: COLORS[id],
+    x: 3,
+    y: 0
+  };
+}
+
+function drawCell(x,y,color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x*SIZE,y*SIZE,SIZE,SIZE);
+  ctx.strokeStyle="#111";
+  ctx.strokeRect(x*SIZE,y*SIZE,SIZE,SIZE);
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  board.forEach((row,y)=>
+    row.forEach((v,x)=>v && drawCell(x,y,v))
+  );
+  piece.shape.forEach((row,y)=>
+    row.forEach((v,x)=>v && drawCell(piece.x+x,piece.y+y,piece.color))
+  );
+}
+
+function collide(px,py,shape) {
+  return shape.some((row,y)=>
+    row.some((v,x)=>
+      v && (board[py+y]?.[px+x] !== 0)
+    )
+  );
+}
+
+function merge() {
+  piece.shape.forEach((row,y)=>
+    row.forEach((v,x)=>{
+      if(v) board[piece.y+y][piece.x+x]=piece.color;
+    })
+  );
+}
+
+function clearLines() {
+  board = board.filter(r=>r.some(v=>!v));
+  while(board.length<ROWS){
+    board.unshift(Array(COLS).fill(0));
+    score+=100;
+  }
+  document.getElementById("score").innerText="得分："+score;
+}
+
+function drop() {
+  if(paused) return;
+  if(!collide(piece.x,piece.y+1,piece.shape)){
+    piece.y++;
+  } else {
+    merge();
+    clearLines();
+    piece=newPiece();
+  }
+  draw();
+}
+
+function hardDrop() {
+  while(!collide(piece.x,piece.y+1,piece.shape)) piece.y++;
+  drop();
+}
+
+function move(dir) {
+  if(!collide(piece.x+dir,piece.y,piece.shape)) piece.x+=dir;
+  draw();
+}
+
+function rotate() {
+  const rotated = piece.shape[0].map((_,i)=>piece.shape.map(r=>r[i]).reverse());
+  if(!collide(piece.x,piece.y,rotated)) piece.shape=rotated;
+  draw();
+}
+
+function pause() {
+  paused=!paused;
+}
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft") move(-1);
+  if(e.key==="ArrowRight") move(1);
+  if(e.key==="ArrowDown") drop();
+  if(e.key==="ArrowUp") rotate();
+  if(e.key===" ") hardDrop();
+});
+
+setInterval(drop,700);
+draw();
+</script>
+
+</body>
+</html>
