@@ -27,7 +27,8 @@ h1 {
   padding: 10px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10px;
+  gap: 10px;
+  touch-action: none; /* 关键：禁止浏览器默认滑动 */
 }
 
 .cell {
@@ -94,11 +95,10 @@ function init() {
 
 function addNumber() {
   let empty = [];
-  for (let i=0;i<4;i++) {
-    for (let j=0;j<4;j++) {
+  for (let i=0;i<4;i++)
+    for (let j=0;j<4;j++)
       if (board[i][j] === 0) empty.push([i,j]);
-    }
-  }
+
   if (!empty.length) return;
   let [x,y] = empty[Math.floor(Math.random()*empty.length)];
   board[x][y] = Math.random() < 0.9 ? 2 : 4;
@@ -126,7 +126,9 @@ function slide(row) {
       row[i+1] = 0;
     }
   }
-  return row.filter(v => v).concat(Array(4-row.filter(v=>v).length).fill(0));
+  row = row.filter(v => v);
+  while (row.length < 4) row.push(0);
+  return row;
 }
 
 function rotate(times) {
@@ -137,29 +139,45 @@ function rotate(times) {
 
 function move(dir) {
   let old = JSON.stringify(board);
-  if (dir==="left") {
-    board = board.map(r => slide(r));
-  }
-  if (dir==="right") {
-    board = board.map(r => slide(r.reverse()).reverse());
-  }
-  if (dir==="up") {
-    rotate(1); board = board.map(r => slide(r)); rotate(3);
-  }
-  if (dir==="down") {
-    rotate(3); board = board.map(r => slide(r)); rotate(1);
-  }
+  if (dir==="left") board = board.map(r => slide(r));
+  if (dir==="right") board = board.map(r => slide(r.reverse()).reverse());
+  if (dir==="up") { rotate(1); board = board.map(r => slide(r)); rotate(3); }
+  if (dir==="down") { rotate(3); board = board.map(r => slide(r)); rotate(1); }
+
   if (JSON.stringify(board)!==old) {
     addNumber();
     render();
   }
 }
 
+/* 键盘支持 */
 document.addEventListener("keydown", e => {
   if (e.key==="ArrowLeft") move("left");
   if (e.key==="ArrowRight") move("right");
   if (e.key==="ArrowUp") move("up");
   if (e.key==="ArrowDown") move("down");
+});
+
+/* 👉 触屏滑动支持 */
+let startX = 0, startY = 0;
+const game = document.getElementById("game");
+
+game.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+});
+
+game.addEventListener("touchend", e => {
+  let dx = e.changedTouches[0].clientX - startX;
+  let dy = e.changedTouches[0].clientY - startY;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 30) move("right");
+    else if (dx < -30) move("left");
+  } else {
+    if (dy > 30) move("down");
+    else if (dy < -30) move("up");
+  }
 });
 
 init();
